@@ -6,7 +6,7 @@ import { MediaShowcase } from "@/components/home/MediaShowcase";
 import { Contact } from "@/components/home/Contact";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppDialog } from "@/components/WhatsAppDialog";
-import whatsApp from "./assets/whatsappIcon.svg";
+import whatsApp from "src/Assets/whatsappIcon.svg";
 
 function App() {
   const [whatsappOpen, setWhatsappOpen] = useState(false);
