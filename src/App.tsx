@@ -6,7 +6,6 @@ import { MediaShowcase } from "@/components/home/MediaShowcase";
 import { Contact } from "@/components/home/Contact";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppDialog } from "@/components/WhatsAppDialog";
-import { MessageCircle } from "lucide-react";
 import whatsApp from "./assets/whatsappIcon.svg";
 
 function App() {
