@@ -21,8 +21,10 @@ function HomePage() {
     const message = "Hi";
 
     if (isMobile) {
-      const formattedNumber = `1${phoneNumber.replace(/\D/g, '')}`;
-      window.location.href = `whatsapp://send?phone=${formattedNumber}&text=${encodeURIComponent(message)}`;
+      const formattedNumber = `1${phoneNumber.replace(/\D/g, "")}`;
+      window.location.href = `whatsapp://send?phone=${formattedNumber}&text=${encodeURIComponent(
+        message
+      )}`;
     } else {
       setWhatsappOpen(true);
     }
@@ -36,7 +38,7 @@ function HomePage() {
       <WhyChooseUs />
       <MediaShowcase />
       <Contact />
-      
+
       <button
         onClick={handleWhatsAppClick}
         className="fixed bottom-6 right-6 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl z-50 group"

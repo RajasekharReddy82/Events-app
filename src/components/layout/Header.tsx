@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -7,16 +7,26 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from '@/components/ui/navigation-menu';
-import { Calendar, Gift, Building2, PartyPopper, Menu, X, Palette, ClipboardList, Users } from 'lucide-react';
+} from "@/components/ui/navigation-menu";
+import {
+  Calendar,
+  Gift,
+  Building2,
+  PartyPopper,
+  Menu,
+  X,
+  Palette,
+  ClipboardList,
+  Users,
+} from "lucide-react";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const scrollToContact = () => {
-    const contactSection = document.getElementById('contact-section');
+    const contactSection = document.getElementById("contact-section");
     if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
+      contactSection.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -41,21 +51,27 @@ export function Header() {
                         <PartyPopper className="h-5 w-5" />
                         <div>
                           <div className="font-medium">Birthdays</div>
-                          <p className="text-sm text-muted-foreground">Celebrate your special day</p>
+                          <p className="text-sm text-muted-foreground">
+                            Celebrate your special day
+                          </p>
                         </div>
                       </NavigationMenuLink>
                       <NavigationMenuLink className="flex items-center space-x-2 p-2 hover:bg-muted rounded-md">
                         <Gift className="h-5 w-5" />
                         <div>
                           <div className="font-medium">Weddings</div>
-                          <p className="text-sm text-muted-foreground">Your perfect wedding</p>
+                          <p className="text-sm text-muted-foreground">
+                            Your perfect wedding
+                          </p>
                         </div>
                       </NavigationMenuLink>
                       <NavigationMenuLink className="flex items-center space-x-2 p-2 hover:bg-muted rounded-md">
                         <Building2 className="h-5 w-5" />
                         <div>
                           <div className="font-medium">Corporate</div>
-                          <p className="text-sm text-muted-foreground">Professional events</p>
+                          <p className="text-sm text-muted-foreground">
+                            Professional events
+                          </p>
                         </div>
                       </NavigationMenuLink>
                     </div>
@@ -69,21 +85,27 @@ export function Header() {
                         <Palette className="h-5 w-5" />
                         <div>
                           <div className="font-medium">Decor</div>
-                          <p className="text-sm text-muted-foreground">Custom event decoration</p>
+                          <p className="text-sm text-muted-foreground">
+                            Custom event decoration
+                          </p>
                         </div>
                       </NavigationMenuLink>
                       <NavigationMenuLink className="flex items-center space-x-2 p-2 hover:bg-muted rounded-md">
                         <ClipboardList className="h-5 w-5" />
                         <div>
                           <div className="font-medium">Planning</div>
-                          <p className="text-sm text-muted-foreground">Comprehensive event planning</p>
+                          <p className="text-sm text-muted-foreground">
+                            Comprehensive event planning
+                          </p>
                         </div>
                       </NavigationMenuLink>
                       <NavigationMenuLink className="flex items-center space-x-2 p-2 hover:bg-muted rounded-md">
                         <Users className="h-5 w-5" />
                         <div>
                           <div className="font-medium">Coordination</div>
-                          <p className="text-sm text-muted-foreground">Full event coordination services</p>
+                          <p className="text-sm text-muted-foreground">
+                            Full event coordination services
+                          </p>
                         </div>
                       </NavigationMenuLink>
                     </div>
@@ -94,7 +116,9 @@ export function Header() {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost"  onClick={scrollToContact}>Contact</Button>
+            <Button variant="ghost" onClick={scrollToContact}>
+              Contact
+            </Button>
             <Button onClick={scrollToContact}>Book Now</Button>
           </div>
 
@@ -125,7 +149,9 @@ export function Header() {
             <Button variant="ghost" className="w-full justify-start">
               Contact
             </Button>
-            <Button className="w-full" onClick={scrollToContact}>Book Now</Button>
+            <Button className="w-full" onClick={scrollToContact}>
+              Book Now
+            </Button>
           </div>
         </div>
       )}

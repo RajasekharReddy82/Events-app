@@ -16,21 +16,24 @@ const categories = [
   {
     id: "beach",
     title: "Beach Events",
-    image: "https://res.cloudinary.com/dmxc84rqd/image/upload/v1730377991/Snapinsta.app_431739756_427005106456087_8575211153147516235_n_1080_but9nn.jpg",
-    description: "Stunning beachside celebrations"
+    image:
+      "https://res.cloudinary.com/dmxc84rqd/image/upload/v1730377991/Snapinsta.app_431739756_427005106456087_8575211153147516235_n_1080_but9nn.jpg",
+    description: "Stunning beachside celebrations",
   },
   {
     id: "birthday",
     title: "Birthday Events",
-    image: "https://res.cloudinary.com/dmxc84rqd/image/upload/v1730377982/Snapinsta.app_439611193_727330789596898_3003562067357843882_n_1080_es00m5.jpg",
-    description: "Memorable birthday celebrations"
+    image:
+      "https://res.cloudinary.com/dmxc84rqd/image/upload/v1730377982/Snapinsta.app_439611193_727330789596898_3003562067357843882_n_1080_es00m5.jpg",
+    description: "Memorable birthday celebrations",
   },
   {
     id: "wedding",
     title: "Wedding Events",
-    image: "https://res.cloudinary.com/dmxc84rqd/image/upload/v1730377980/Snapinsta.app_460166574_1885782978596943_2717914374280458260_n_1080_gojfgm.jpg",
-    description: "Elegant wedding ceremonies"
-  }
+    image:
+      "https://res.cloudinary.com/dmxc84rqd/image/upload/v1730377980/Snapinsta.app_460166574_1885782978596943_2717914374280458260_n_1080_gojfgm.jpg",
+    description: "Elegant wedding ceremonies",
+  },
 ];
 
 export function MediaShowcase() {
@@ -47,7 +50,8 @@ export function MediaShowcase() {
         >
           <h2 className="text-4xl font-bold mb-4">Explore Our Events</h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Discover our collection of magical moments and celebrations across different types of events
+            Discover our collection of magical moments and celebrations across
+            different types of events
           </p>
         </motion.div>
 
@@ -70,10 +74,14 @@ export function MediaShowcase() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-60 group-hover:opacity-70 transition-opacity duration-300" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="text-2xl font-bold mb-2 text-center">{category.title}</h3>
-                  <p className="text-white/80 text-center mb-4">{category.description}</p>
-                  <Button 
-                    variant="outline" 
+                  <h3 className="text-2xl font-bold mb-2 text-center">
+                    {category.title}
+                  </h3>
+                  <p className="text-white/80 text-center mb-4">
+                    {category.description}
+                  </p>
+                  <Button
+                    variant="outline"
                     className="bg-white/20 backdrop-blur-sm border-white text-white hover:bg-white/30"
                   >
                     View Gallery

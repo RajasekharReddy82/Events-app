@@ -7,7 +7,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { MessageCircle } from 'lucide-react';
+import { MessageCircle } from "lucide-react";
 
 interface WhatsAppDialogProps {
   open: boolean;
@@ -15,14 +15,20 @@ interface WhatsAppDialogProps {
   phoneNumber: string;
 }
 
-export function WhatsAppDialog({ open, onOpenChange, phoneNumber }: WhatsAppDialogProps) {
+export function WhatsAppDialog({
+  open,
+  onOpenChange,
+  phoneNumber,
+}: WhatsAppDialogProps) {
   const handleWhatsAppWeb = () => {
     // Format phone number to include country code without any special characters
-    const formattedNumber = `1${phoneNumber.replace(/\D/g, '')}`;
-    const message = 'Hi';
+    const formattedNumber = `1${phoneNumber.replace(/\D/g, "")}`;
+    const message = "Hi";
     window.open(
-      `https://web.whatsapp.com/send?phone=${formattedNumber}&text=${encodeURIComponent(message)}`,
-      '_blank'
+      `https://web.whatsapp.com/send?phone=${formattedNumber}&text=${encodeURIComponent(
+        message
+      )}`,
+      "_blank"
     );
     onOpenChange(false);
   };
