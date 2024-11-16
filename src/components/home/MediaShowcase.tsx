@@ -1,16 +1,7 @@
-import { useState } from "react";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import {
-  Play,
-  X,
-  ChevronLeft,
-  ChevronRight,
-  Image as ImageIcon,
-  Video,
-} from "lucide-react";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 const categories = [
   {
@@ -38,6 +29,43 @@ const categories = [
 
 export function MediaShowcase() {
   const navigate = useNavigate();
+
+  const [images, setImages] = useState([]);
+  const [error, setError] = useState("");
+
+  console.log(images, error);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const cloudName = "dmxc84rqd"; // Replace with your Cloudinary cloud name
+        const folderName = "larkfield"; // Replace with your folder name
+        const apiKey = "515931874796397"; // Replace with your Cloudinary API key
+        const apiSecret = "-pfDryTh4iTlXJwTvFld2_L_hzM"; // Replace with your Cloudinary API secret (avoid using directly in frontend for security)
+        const preset = "unsigned_preset";
+
+        // Base64 encode your API key and secret for Basic Auth
+        const auth = btoa(`${apiKey}:${apiSecret}`);
+
+        const response = await fetch(
+          //`https://${apiKey}:${apiSecret}@api.cloudinary.com/v1_1/${cloudName}/resources/image`,
+          `https://api.cloudinary.com/v1_1/${cloudName}/resources/by_asset_folder?asset_folder=larkfield`,
+          {
+            headers: {
+              Authorization: `Basic ${apiKey}:${apiSecret}`,
+            },
+          }
+        ).then((result) => result.json());
+
+        setImages(response.data.resources);
+      } catch (err) {
+        setError("Failed to fetch images.");
+        console.error(err);
+      }
+    };
+
+    fetchImages();
+  }, []);
 
   return (
     <section className="py-20 bg-gradient-to-b from-gray-50 via-white to-gray-50">
