@@ -20,6 +20,7 @@
     "@radix-ui/react-visually-hidden": "^1.0.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "embla-carousel-react": "^8.0.0-rc22",
     "framer-motion": "^11.0.8",
     "lucide-react": "^0.344.0",
     "react": "^18.2.0",

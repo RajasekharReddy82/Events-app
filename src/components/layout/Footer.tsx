@@ -1,4 +1,4 @@
-import { Heart } from 'lucide-react';
+import { Heart } from "lucide-react";
 
 export function Footer() {
   return (
@@ -11,7 +11,7 @@ export function Footer() {
           <div className="flex items-center space-x-1 text-sm text-gray-400">
             <span>Made with</span>
             <Heart className="w-4 h-4 text-red-500 mx-1" />
-            <span>in New Jersey</span>
+            <span>in New York and New Jersey</span>
           </div>
         </div>
       </div>
