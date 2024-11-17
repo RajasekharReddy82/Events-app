@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ImageIcon, ArrowRight } from "lucide-react";
@@ -89,6 +89,27 @@ const previewMedia = [
 export function MediaShowcase() {
   const navigate = useNavigate();
   const handleNavigate = (category: string) => navigate(`/gallery/${category}`);
+  const [images, setImages] = useState([]);
+  const [error, setError] = useState("");
+
+  console.log(images, error);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const response = await fetch(
+          "https://ascenteventsbackend.vercel.app/api/images"
+        );
+        const data = await response.json();
+        setImages(data.resources); // Use the `resources` array from Cloudinary API response
+      } catch (err) {
+        setError("Failed to fetch images.");
+        console.error(err);
+      }
+    };
+
+    fetchImages();
+  }, []);
 
   return (
     <section className="py-20 bg-gradient-to-b from-gray-50 via-white to-gray-50">

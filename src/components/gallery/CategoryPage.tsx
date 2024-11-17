@@ -398,26 +398,6 @@ export function CategoryPage() {
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
   const [activeFilter, setActiveFilter] = useState("all");
 
-  const [images, setImages] = useState([]);
-  const [error, setError] = useState("");
-
-  console.log(images, error);
-
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/api/images");
-        const data = await response.json();
-        setImages(data.resources); // Use the `resources` array from Cloudinary API response
-      } catch (err) {
-        setError("Failed to fetch images.");
-        console.error(err);
-      }
-    };
-
-    fetchImages();
-  }, []);
-
   const categoryMedia = useMemo(
     () => [
       {

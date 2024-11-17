@@ -142,7 +142,7 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 0.8 }}
-        className="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-white/90 text-center cursor-pointer"
+        className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/90 text-center cursor-pointer"
         onClick={() =>
           window.scrollTo({ top: window.innerHeight, behavior: "smooth" })
         }
