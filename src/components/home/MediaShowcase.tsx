@@ -1,115 +1,119 @@
-import { memo, useEffect, useState } from "react";
+import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ImageIcon, ArrowRight } from "lucide-react";
+import { ImageIcon, ArrowRight, Loader2, RefreshCcw } from "lucide-react";
 import { motion } from "framer-motion";
+import { IGalleryTypes } from "@/types/gallery";
+import { useGalleryImages } from "@/hooks/useGalleryImages";
 
-// Memoized Image Component
+// Memoized Image Component with loading optimization
 const GalleryImage = memo(
   ({
     item,
     index,
     onNavigate,
   }: {
-    item: (typeof previewMedia)[0];
+    item: IGalleryTypes;
     index: number;
-    onNavigate: (category: string) => void;
-  }) => (
-    <motion.div
-      key={item.id}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
-      className="group cursor-pointer"
-      onClick={() => onNavigate(item.category)}
-    >
-      <div className="relative overflow-hidden rounded-xl">
-        <img
-          src={item.url}
-          alt=""
-          loading={index < 3 ? "eager" : "lazy"}
-          width={400}
-          height={300}
-          className="w-full h-[300px] object-cover transition-transform duration-500 group-hover:scale-110"
-        />
-        <div className="absolute top-4 right-4 z-10">
-          <div className="w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
-            <ImageIcon className="h-4 w-4 text-white" />
+    onNavigate: () => void;
+  }) => {
+    // Generate optimized image URL for thumbnails
+    const thumbnailUrl = item.secure_url.replace(
+      "/upload/",
+      "/upload/c_scale,w_800,q_auto/"
+    );
+
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: index * 0.1 }}
+        className="group cursor-pointer"
+        onClick={onNavigate}
+      >
+        <div className="relative overflow-hidden rounded-xl shadow-md">
+          <img
+            src={thumbnailUrl}
+            alt={item.display_name}
+            loading={index < 3 ? "eager" : "lazy"}
+            className="w-full h-[300px] object-cover transition-transform duration-500 group-hover:scale-110"
+            decoding="async"
+          />
+          <div className="absolute top-4 right-4 z-10">
+            <div className="w-8 h-8 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center">
+              <ImageIcon className="h-4 w-4 text-white" />
+            </div>
           </div>
+          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center" />
         </div>
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center" />
-      </div>
-    </motion.div>
-  )
+      </motion.div>
+    );
+  }
 );
 
 GalleryImage.displayName = "GalleryImage";
 
-// Optimized image URLs with Cloudinary transformations
-const previewMedia = [
-  {
-    id: 1,
-    type: "photo",
-    url: "https://res.cloudinary.com/dmxc84rqd/image/upload/c_scale,w_800,q_auto/v1731782398/IMG_2973_nadgzg.jpg",
-    category: "larkfield",
-  },
-  {
-    id: 2,
-    type: "photo",
-    url: "https://res.cloudinary.com/dmxc84rqd/image/upload/c_scale,w_800,q_auto/v1731782087/IMG_2971_yaojri.jpg",
-    category: "larkfield",
-  },
-  {
-    id: 3,
-    type: "photo",
-    url: "https://res.cloudinary.com/dmxc84rqd/image/upload/c_scale,w_800,q_auto/v1731781239/DJI_20240914_084842_834_ft7422.jpg",
-    category: "larkfield",
-  },
-  {
-    id: 4,
-    type: "photo",
-    url: "https://res.cloudinary.com/dmxc84rqd/image/upload/c_scale,w_800,q_auto/v1731781103/IMG_2638_x2i4n1.jpg",
-    category: "larkfield",
-  },
-  {
-    id: 5,
-    type: "photo",
-    url: "https://res.cloudinary.com/dmxc84rqd/image/upload/c_scale,w_800,q_auto/v1731780975/DJI_20240923_165716_024_dtlvhb.jpg",
-    category: "larkfield",
-  },
-  {
-    id: 6,
-    type: "photo",
-    url: "https://res.cloudinary.com/dmxc84rqd/image/upload/c_scale,w_800,q_auto/v1731780871/DJI_20240923_190743_544_bqt5rz.jpg",
-    category: "larkfield",
-  },
-];
+// Fallback component for loading and error states
+const GalleryFallback = memo(
+  ({ error, onRetry }: { error?: string; onRetry?: () => void }) => (
+    <div className="col-span-full py-20 text-center">
+      {error ? (
+        <div className="space-y-4">
+          <ImageIcon className="w-12 h-12 mx-auto text-gray-400" />
+          <p className="text-gray-600 mb-4">{error}</p>
+          {onRetry && (
+            <Button
+              variant="outline"
+              onClick={onRetry}
+              className="inline-flex items-center gap-2"
+            >
+              <RefreshCcw className="w-4 h-4" />
+              Try Again
+            </Button>
+          )}
+        </div>
+      ) : (
+        <div className="space-y-4">
+          <Loader2 className="w-12 h-12 mx-auto text-primary animate-spin" />
+          <p className="text-gray-600">Loading gallery...</p>
+        </div>
+      )}
+    </div>
+  )
+);
+
+GalleryFallback.displayName = "GalleryFallback";
 
 export function MediaShowcase() {
   const navigate = useNavigate();
-  const handleNavigate = () => navigate(`/gallery`);
-  const [images, setImages] = useState([]);
-  const [error, setError] = useState("");
+  const { images, isLoading, error, retry } = useGalleryImages();
 
-  console.log(images, error);
+  const handleNavigate = () => navigate("/gallery");
 
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const response = await fetch(
-          "https://ascenteventsbackend.vercel.app/api/images"
-        );
-        const data = await response.json();
-        setImages(data.resources); // Use the `resources` array from Cloudinary API response
-      } catch (err) {
-        setError("Failed to fetch images.");
-        console.error(err);
-      }
-    };
+  // Fallback images for static data
+  const fallbackImages: IGalleryTypes[] = [
+    {
+      asset_id: 45,
+      display_name: "Event Setup",
+      secure_url:
+        "https://res.cloudinary.com/dmxc84rqd/image/upload/v1731782398/IMG_2973_nadgzg.jpg",
+      asset_folder: "fallback",
+      bytes: 0,
+      created_at: "",
+      format: "jpg",
+      height: 300,
+      public_id: "fallback_image",
+      resource_type: "image",
+      type: "upload",
+      url: "https://res.cloudinary.com/dmxc84rqd/image/upload/v1731782398/IMG_2973_nadgzg.jpg",
+      version: 1,
+      width: 300,
+    },
+  ];
 
-    fetchImages();
-  }, []);
+  // Use fallback images if API fails
+  const displayImages = images.length > 0 ? images : fallbackImages;
 
   return (
     <section className="py-20 bg-gradient-to-b from-gray-50 via-white to-gray-50">
@@ -127,14 +131,22 @@ export function MediaShowcase() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {previewMedia.map((item, index) => (
-            <GalleryImage
-              key={item.id}
-              item={item}
-              index={index}
-              onNavigate={() => handleNavigate()}
-            />
-          ))}
+          {isLoading ? (
+            <GalleryFallback />
+          ) : error ? (
+            <GalleryFallback error={error} onRetry={retry} />
+          ) : (
+            displayImages
+              .slice(0, 6)
+              .map((item, index) => (
+                <GalleryImage
+                  key={item.asset_id}
+                  item={item}
+                  index={index}
+                  onNavigate={handleNavigate}
+                />
+              ))
+          )}
         </div>
 
         <motion.div
@@ -144,7 +156,7 @@ export function MediaShowcase() {
           className="text-center"
         >
           <Button
-            onClick={() => handleNavigate()}
+            onClick={handleNavigate}
             size="lg"
             className="bg-primary-600 hover:bg-primary-700 text-white px-8 py-6 rounded-full text-lg font-medium group"
           >
