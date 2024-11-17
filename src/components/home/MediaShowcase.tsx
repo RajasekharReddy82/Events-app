@@ -137,6 +137,7 @@ export function MediaShowcase() {
             <GalleryFallback error={error} onRetry={retry} />
           ) : (
             displayImages
+              .filter((item) => item.resource_type === "image")
               .slice(0, 6)
               .map((item, index) => (
                 <GalleryImage
