@@ -13,6 +13,19 @@ import whatsApp from "./Assets/whatsappIcon.svg";
 import { useState } from "react";
 
 function HomePage() {
+  return (
+    <>
+      <Hero />
+      <About />
+      <Services />
+      <WhyChooseUs />
+      <MediaShowcase />
+      <Contact />
+    </>
+  );
+}
+
+function App() {
   const [whatsappOpen, setWhatsappOpen] = useState(false);
 
   const handleWhatsAppClick = () => {
@@ -31,38 +44,6 @@ function HomePage() {
   };
 
   return (
-    <>
-      <Hero />
-      <About />
-      <Services />
-      <WhyChooseUs />
-      <MediaShowcase />
-      <Contact />
-
-      <button
-        onClick={handleWhatsAppClick}
-        className="fixed bottom-6 right-6 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl z-50 group"
-        aria-label="Contact on WhatsApp"
-      >
-        <img
-          src={whatsApp}
-          alt="WhatsApp"
-          title="Chat with us on WhatsApp"
-          className="w-12 h-12 group-hover:rotate-12 transition-transform duration-300"
-        />
-      </button>
-
-      <WhatsAppDialog
-        open={whatsappOpen}
-        onOpenChange={setWhatsappOpen}
-        phoneNumber="9293938520"
-      />
-    </>
-  );
-}
-
-function App() {
-  return (
     <Router>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header />
@@ -72,6 +53,24 @@ function App() {
             <Route path="/gallery" element={<CategoryPage />} />
           </Routes>
         </main>
+        <button
+          onClick={handleWhatsAppClick}
+          className="fixed bottom-6 right-6 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl z-50 group"
+          aria-label="Contact on WhatsApp"
+        >
+          <img
+            src={whatsApp}
+            alt="WhatsApp"
+            title="Chat with us on WhatsApp"
+            className="w-12 h-12 group-hover:rotate-12 transition-transform duration-300"
+          />
+        </button>
+
+        <WhatsAppDialog
+          open={whatsappOpen}
+          onOpenChange={setWhatsappOpen}
+          phoneNumber="9293938520"
+        />
         <Footer />
       </div>
     </Router>

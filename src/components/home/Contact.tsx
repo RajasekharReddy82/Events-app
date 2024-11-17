@@ -106,7 +106,7 @@ export function Contact() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-primary-900">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-primary-900 md:line-height: 1.3">
             Let's Create Something Extraordinary Together
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
