@@ -12,6 +12,7 @@ import { CategoryPage } from "@/components/gallery/CategoryPage";
 import whatsApp from "./Assets/whatsappIcon.svg";
 import { useState } from "react";
 import { ScrollToTop } from "./components/ScrollToTop";
+import { Reviews } from "./components/home/Reviwes";
 
 function HomePage() {
   return (
@@ -21,6 +22,7 @@ function HomePage() {
       <Services />
       <WhyChooseUs />
       <MediaShowcase />
+      <Reviews />
       <Contact />
     </>
   );
