@@ -88,7 +88,7 @@ const previewMedia = [
 
 export function MediaShowcase() {
   const navigate = useNavigate();
-  const handleNavigate = (category: string) => navigate(`/gallery/${category}`);
+  const handleNavigate = () => navigate(`/gallery`);
   const [images, setImages] = useState([]);
   const [error, setError] = useState("");
 
@@ -132,7 +132,7 @@ export function MediaShowcase() {
               key={item.id}
               item={item}
               index={index}
-              onNavigate={handleNavigate}
+              onNavigate={() => handleNavigate()}
             />
           ))}
         </div>
@@ -144,7 +144,7 @@ export function MediaShowcase() {
           className="text-center"
         >
           <Button
-            onClick={() => handleNavigate("larkfield")}
+            onClick={() => handleNavigate()}
             size="lg"
             className="bg-primary-600 hover:bg-primary-700 text-white px-8 py-6 rounded-full text-lg font-medium group"
           >

@@ -63,13 +63,13 @@ function HomePage() {
 
 function App() {
   return (
-    <Router future={{ v7_startTransition: true }}>
+    <Router>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header />
         <main>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/gallery/:category" element={<CategoryPage />} />
+            <Route path="/gallery" element={<CategoryPage />} />
           </Routes>
         </main>
         <Footer />
