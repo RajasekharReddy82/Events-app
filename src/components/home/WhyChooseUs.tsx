@@ -1,7 +1,8 @@
-import { motion } from 'framer-motion';
-import { Award, Users, Sparkles, Shield } from 'lucide-react';
+import { motion } from "framer-motion";
+import { Award, Users, Sparkles, Shield } from "lucide-react";
 
 export function WhyChooseUs() {
+  const imgSource = `https://res.cloudinary.com/dmxc84rqd/image/upload/v1731825550/photo-1478146059778-26028b07395a_bs0zyw.jpg`;
   return (
     <section className="py-24 bg-gradient-to-b from-white to-gray-50 overflow-hidden">
       <div className="container mx-auto px-4">
@@ -12,7 +13,9 @@ export function WhyChooseUs() {
           transition={{ duration: 0.5 }}
           className="text-center mb-20"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">Why Choose Ascent Events?</h2>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            Why Choose Ascent Events?
+          </h2>
           <div className="w-24 h-1 bg-primary mx-auto rounded-full mb-6" />
         </motion.div>
 
@@ -28,7 +31,7 @@ export function WhyChooseUs() {
             <div className="relative">
               <div className="aspect-square rounded-full overflow-hidden border-8 border-white shadow-2xl">
                 <img
-                  src="https://images.unsplash.com/photo-1478146059778-26028b07395a?auto=format&fit=crop&q=80"
+                  src={imgSource}
                   alt="Luxury Event Setup"
                   className="w-full h-full object-cover"
                   loading="lazy"
@@ -46,23 +49,27 @@ export function WhyChooseUs() {
               {
                 icon: <Award className="w-6 h-6" />,
                 title: "Unmatched Expertise",
-                description: "At Ascent Events, we take pride in offering exceptional event décor services that set your events apart. We understand the importance of creating a cohesive, beautiful atmosphere."
+                description:
+                  "At Ascent Events, we take pride in offering exceptional event décor services that set your events apart. We understand the importance of creating a cohesive, beautiful atmosphere.",
               },
               {
                 icon: <Users className="w-6 h-6" />,
                 title: "Trusted Network",
-                description: "While we specialize in décor, our network of affiliated vendors ensures that all aspects of your event—from photography and music to coordination—are handled by trusted professionals."
+                description:
+                  "While we specialize in décor, our network of affiliated vendors ensures that all aspects of your event—from photography and music to coordination—are handled by trusted professionals.",
               },
               {
                 icon: <Sparkles className="w-6 h-6" />,
                 title: "Cultural Excellence",
-                description: "We excel in creating décor for diverse cultural celebrations, including American weddings, Desi celebrations, traditional Nigerian weddings, and Spanish fiestas."
+                description:
+                  "We excel in creating décor for diverse cultural celebrations, including American weddings, Desi celebrations, traditional Nigerian weddings, and Spanish fiestas.",
               },
               {
                 icon: <Shield className="w-6 h-6" />,
                 title: "Commitment to Excellence",
-                description: "Our commitment to transparency means you'll always know what to expect. We're dedicated to delivering more than promised."
-              }
+                description:
+                  "Our commitment to transparency means you'll always know what to expect. We're dedicated to delivering more than promised.",
+              },
             ].map((item, index) => (
               <motion.div
                 key={index}
