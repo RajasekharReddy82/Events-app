@@ -1,5 +1,5 @@
-import { memo } from "react";
-import { useNavigate } from "react-router-dom";
+import { memo, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ImageIcon, ArrowRight, Loader2, RefreshCcw } from "lucide-react";
 import { motion } from "framer-motion";
@@ -87,9 +87,20 @@ GalleryFallback.displayName = "GalleryFallback";
 
 export function MediaShowcase() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { images, isLoading, error, retry } = useGalleryImages();
 
   const handleNavigate = () => navigate("/gallery");
+
+  useEffect(() => {
+    if (location.state?.scrollToGallery) {
+      const gallerySection = document.querySelector("#gallery-section");
+      if (gallerySection) {
+        gallerySection.scrollIntoView({ behavior: "auto" });
+      }
+      navigate(location.pathname, { state: { scrollToGallery: false } });
+    }
+  }, [location.state]);
 
   // Fallback images for static data
   const fallbackImages: IGalleryTypes[] = [
@@ -116,7 +127,10 @@ export function MediaShowcase() {
   const displayImages = images.length > 0 ? images : fallbackImages;
 
   return (
-    <section className="py-20 bg-gradient-to-b from-gray-50 via-white to-gray-50">
+    <section
+      className="py-20 bg-gradient-to-b from-gray-50 via-white to-gray-50"
+      id="gallery-section"
+    >
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

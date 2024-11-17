@@ -55,6 +55,10 @@ export function CategoryPage() {
     setSelectedMedia(mediaData[nextIndex]);
   };
 
+  const handleBackToHome = () => {
+    navigate("/", { state: { scrollToGallery: true } });
+  };
+
   return (
     <div className="py-24 px-4 bg-gradient-to-b from-gray-50 via-white to-gray-50">
       <div className="container mx-auto">
@@ -63,7 +67,7 @@ export function CategoryPage() {
             variant="outline"
             size="lg"
             className="flex items-center gap-2 bg-white hover:bg-gray-50 shadow-sm border-gray-200 text-gray-700 hover:text-gray-900 transition-all duration-300 rounded-full px-6"
-            onClick={() => navigate("/")}
+            onClick={handleBackToHome}
           >
             <ArrowLeft className="w-5 h-5" />
             Back to Home
