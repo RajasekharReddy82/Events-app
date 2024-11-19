@@ -57,14 +57,14 @@ export function Header() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b">
       <div className="container mx-auto px-4">
-        <div
-          className="flex items-center justify-between h-16 cursor-pointer"
-          onClick={() => {
-            navigate("/");
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
-        >
-          <div className="flex items-center space-x-2">
+        <div className="flex items-center justify-between h-16">
+          <div
+            className="flex items-center space-x-2"
+            onClick={() => {
+              navigate("/");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          >
             <Calendar className="h-6 w-6 text-primary" />
             <span className="text-xl font-semibold">Ascent Events</span>
           </div>
