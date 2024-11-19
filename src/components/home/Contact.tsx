@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useRef, FormEvent } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import emailjs from "@emailjs/browser";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
-  MessageCircle,
   Calendar,
   Users,
   DollarSign,
@@ -16,75 +17,90 @@ import {
   ArrowRight,
   CheckCircle,
 } from "lucide-react";
-
-interface FormData {
-  name: string;
-  email: string;
-  phone: string;
-  eventType: string;
-  eventDate: string;
-  guestCount: string;
-  budget: string;
-  venue: string;
-  message: string;
-}
+import { ContactFormData, contactFormSchema } from "@/lib/validations/contact";
 
 export function Contact() {
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    phone: "",
-    eventType: "",
-    eventDate: "",
-    guestCount: "",
-    budget: "",
-    venue: "",
-    message: "",
-  });
-
+  const formRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue,
+    trigger,
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      eventType: undefined,
+      eventDate: "",
+      guestCount: undefined,
+      budget: undefined,
+      venue: "",
+      message: "",
+    },
+  });
+
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const minDate = tomorrow.toISOString().split("T")[0];
+
+  const formatPhoneNumber = async (value: string) => {
+    const phoneNumber = value.replace(/\D/g, "");
+    const truncated = phoneNumber.slice(0, 10);
+
+    let formatted = truncated;
+    if (truncated.length <= 3) {
+      formatted = truncated;
+    } else if (truncated.length <= 6) {
+      formatted = `(${truncated.slice(0, 3)}) ${truncated.slice(3)}`;
+    } else {
+      formatted = `(${truncated.slice(0, 3)}) ${truncated.slice(
+        3,
+        6
+      )}-${truncated.slice(6)}`;
+    }
+
+    setValue("phone", formatted);
+
+    if (truncated.length === 10) {
+      await trigger("phone");
+    }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    formatPhoneNumber(e.target.value);
+  };
+
+  const onSubmit = async (data: ContactFormData) => {
+    if (!formRef.current) return;
+
     setIsSubmitting(true);
 
-    await emailjs
-      .sendForm("service_zjw0t9t", "template_w994oud", "#myForm", {
-        publicKey: "j8Pwclj8JSITr_IcG",
-      })
-      .then(
-        () => console.log("Event Details Submitted Successfully!"),
-        (err) => console.error("Submission Failed:", err)
+    try {
+      await emailjs.sendForm(
+        "service_zjw0t9t",
+        "template_w994oud",
+        formRef.current,
+        "j8Pwclj8JSITr_IcG"
       );
 
-    setIsSubmitting(false);
-    setSubmitted(true);
+      setSubmitted(true);
+      reset();
 
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        eventType: "",
-        eventDate: "",
-        guestCount: "",
-        budget: "",
-        venue: "",
-        message: "",
-      });
-    }, 3000);
+      setTimeout(() => {
+        setSubmitted(false);
+      }, 3000);
+    } catch (error) {
+      console.error("Failed to send email:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -92,7 +108,6 @@ export function Contact() {
       id="contact-section"
       className="relative py-24 bg-gradient-to-b from-gray-50 via-white to-gray-100"
     >
-      {/* Decorative Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-primary-100/40 via-transparent to-transparent" />
         <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-primary-100/40 via-transparent to-transparent" />
@@ -116,7 +131,6 @@ export function Contact() {
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-12 max-w-7xl mx-auto">
-          {/* Contact Form */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -124,7 +138,6 @@ export function Contact() {
             transition={{ duration: 0.8 }}
           >
             <Card className="p-8 shadow-lg glass-effect border-0 relative overflow-hidden">
-              {/* Success Overlay */}
               {submitted && (
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -149,37 +162,46 @@ export function Contact() {
                 </motion.div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-8" id="myForm">
+              <form
+                ref={formRef}
+                onSubmit={handleSubmit(onSubmit)}
+                className="space-y-8"
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-900">
                       Full Name
                     </label>
                     <input
-                      type="text"
-                      name="name"
-                      required
-                      disabled={isSubmitting}
-                      value={formData.name}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg bg-white/50 border border-gray-200 focus:ring-2 focus:ring-primary-400/20 focus:border-primary-400 transition-all duration-200"
+                      {...register("name")}
+                      className={`w-full px-4 py-3 rounded-lg bg-white/50 border focus:ring-2 focus:ring-primary-400/20 focus:border-primary-400 transition-all duration-200 ${
+                        errors.name ? "border-red-500" : "border-gray-200"
+                      }`}
                       placeholder="Your name"
                     />
+                    {errors.name && (
+                      <p className="text-red-500 text-sm">
+                        {errors.name.message}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-900">
                       Email
                     </label>
                     <input
+                      {...register("email")}
                       type="email"
-                      name="email"
-                      required
-                      disabled={isSubmitting}
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg bg-white/50 border border-gray-200 focus:ring-2 focus:ring-primary-400/20 focus:border-primary-400 transition-all duration-200"
+                      className={`w-full px-4 py-3 rounded-lg bg-white/50 border focus:ring-2 focus:ring-primary-400/20 focus:border-primary-400 transition-all duration-200 ${
+                        errors.email ? "border-red-500" : "border-gray-200"
+                      }`}
                       placeholder="your@email.com"
                     />
+                    {errors.email && (
+                      <p className="text-red-500 text-sm">
+                        {errors.email.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -191,16 +213,19 @@ export function Contact() {
                     <div className="relative">
                       <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                       <input
-                        type="tel"
-                        name="phone"
-                        required
-                        disabled={isSubmitting}
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className="w-full pl-12 pr-4 py-3 rounded-lg bg-white/50 border border-gray-200 focus:ring-2 focus:ring-primary-400/20 focus:border-primary-400 transition-all duration-200"
+                        {...register("phone")}
+                        onChange={handlePhoneChange}
+                        className={`w-full pl-12 pr-4 py-3 rounded-lg bg-white/50 border focus:ring-2 focus:ring-primary-400/20 focus:border-primary-400 transition-all duration-200 ${
+                          errors.phone ? "border-red-500" : "border-gray-200"
+                        }`}
                         placeholder="(123) 456-7890"
                       />
                     </div>
+                    {errors.phone && (
+                      <p className="text-red-500 text-sm">
+                        {errors.phone.message}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-900">
@@ -209,12 +234,12 @@ export function Contact() {
                     <div className="relative">
                       <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                       <select
-                        name="eventType"
-                        required
-                        disabled={isSubmitting}
-                        value={formData.eventType}
-                        onChange={handleChange}
-                        className="w-full pl-12 pr-4 py-3 rounded-lg bg-white/50 border border-gray-200 focus:ring-2 focus:ring-primary-400/20 focus:border-primary-400 transition-all duration-200 appearance-none"
+                        {...register("eventType")}
+                        className={`w-full pl-12 pr-4 py-3 rounded-lg bg-white/50 border focus:ring-2 focus:ring-primary-400/20 focus:border-primary-400 transition-all duration-200 appearance-none ${
+                          errors.eventType
+                            ? "border-red-500"
+                            : "border-gray-200"
+                        }`}
                       >
                         <option value="">Select event type</option>
                         <option value="wedding">Wedding</option>
@@ -224,6 +249,11 @@ export function Contact() {
                         <option value="other">Other</option>
                       </select>
                     </div>
+                    {errors.eventType && (
+                      <p className="text-red-500 text-sm">
+                        {errors.eventType.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -235,15 +265,21 @@ export function Contact() {
                     <div className="relative">
                       <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                       <input
+                        {...register("eventDate")}
                         type="date"
-                        name="eventDate"
-                        required
-                        disabled={isSubmitting}
-                        value={formData.eventDate}
-                        onChange={handleChange}
-                        className="w-full pl-12 pr-4 py-3 rounded-lg bg-white/50 border border-gray-200 focus:ring-2 focus:ring-primary-400/20 focus:border-primary-400 transition-all duration-200"
+                        min={minDate}
+                        className={`w-full pl-12 pr-4 py-3 rounded-lg bg-white/50 border focus:ring-2 focus:ring-primary-400/20 focus:border-primary-400 transition-all duration-200 ${
+                          errors.eventDate
+                            ? "border-red-500"
+                            : "border-gray-200"
+                        }`}
                       />
                     </div>
+                    {errors.eventDate && (
+                      <p className="text-red-500 text-sm">
+                        {errors.eventDate.message}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-900">
@@ -252,16 +288,23 @@ export function Contact() {
                     <div className="relative">
                       <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                       <input
+                        {...register("guestCount")}
                         type="number"
-                        name="guestCount"
-                        required
-                        disabled={isSubmitting}
-                        value={formData.guestCount}
-                        onChange={handleChange}
+                        min="1"
+                        max="10000"
+                        className={`w-full pl-12 pr-4 py-3 rounded-lg bg-white/50 border focus:ring-2 focus:ring-primary-400/20 focus:border-primary-400 transition-all duration-200 ${
+                          errors.guestCount
+                            ? "border-red-500"
+                            : "border-gray-200"
+                        }`}
                         placeholder="Number of guests"
-                        className="w-full pl-12 pr-4 py-3 rounded-lg bg-white/50 border border-gray-200 focus:ring-2 focus:ring-primary-400/20 focus:border-primary-400 transition-all duration-200"
                       />
                     </div>
+                    {errors.guestCount && (
+                      <p className="text-red-500 text-sm">
+                        {errors.guestCount.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -273,26 +316,25 @@ export function Contact() {
                     <div className="relative">
                       <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                       <select
-                        name="budget"
-                        required
-                        disabled={isSubmitting}
-                        value={formData.budget}
-                        onChange={handleChange}
-                        className="w-full pl-12 pr-4 py-3 rounded-lg bg-white/50 border border-gray-200 focus:ring-2 focus:ring-primary-400/20 focus:border-primary-400 transition-all duration-200 appearance-none"
+                        {...register("budget")}
+                        className={`w-full pl-12 pr-4 py-3 rounded-lg bg-white/50 border focus:ring-2 focus:ring-primary-400/20 focus:border-primary-400 transition-all duration-200 appearance-none ${
+                          errors.budget ? "border-red-500" : "border-gray-200"
+                        }`}
                       >
                         <option value="">Select budget range</option>
-                        <option value="2500-5000">$2500 - $5000</option>
+                        <option value="2500-5000">$2,500 - $5,000</option>
                         <option value="5000-10000">$5,000 - $10,000</option>
                         <option value="10000-20000">$10,000 - $20,000</option>
                         <option value="20000-50000">$20,000 - $50,000</option>
-                        <option value="50000-100000">
-                          $50,000 - $1,00,000
-                        </option>
-                        <option value="100000-150000">
-                          $1,00,000 - $1,50,000
-                        </option>
+                        <option value="50000-100000">$50,000 - $100,000</option>
+                        <option value="100000+">$100,000+</option>
                       </select>
                     </div>
+                    {errors.budget && (
+                      <p className="text-red-500 text-sm">
+                        {errors.budget.message}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-900">
@@ -301,16 +343,18 @@ export function Contact() {
                     <div className="relative">
                       <MapPinned className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                       <input
-                        type="text"
-                        name="venue"
-                        required
-                        disabled={isSubmitting}
-                        value={formData.venue}
-                        onChange={handleChange}
+                        {...register("venue")}
+                        className={`w-full pl-12 pr-4 py-3 rounded-lg bg-white/50 border focus:ring-2 focus:ring-primary-400/20 focus:border-primary-400 transition-all duration-200 ${
+                          errors.venue ? "border-red-500" : "border-gray-200"
+                        }`}
                         placeholder="City, State or Venue Name"
-                        className="w-full pl-12 pr-4 py-3 rounded-lg bg-white/50 border border-gray-200 focus:ring-2 focus:ring-primary-400/20 focus:border-primary-400 transition-all duration-200"
                       />
                     </div>
+                    {errors.venue && (
+                      <p className="text-red-500 text-sm">
+                        {errors.venue.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -319,20 +363,24 @@ export function Contact() {
                     Additional Details
                   </label>
                   <textarea
-                    name="message"
-                    disabled={isSubmitting}
-                    value={formData.message}
-                    onChange={handleChange}
+                    {...register("message")}
                     rows={4}
-                    className="w-full px-4 py-3 rounded-lg bg-white/50 border border-gray-200 focus:ring-2 focus:ring-primary-400/20 focus:border-primary-400 transition-all duration-200"
+                    className={`w-full px-4 py-3 rounded-lg bg-white/50 border focus:ring-2 focus:ring-primary-400/20 focus:border-primary-400 transition-all duration-200 ${
+                      errors.message ? "border-red-500" : "border-gray-200"
+                    }`}
                     placeholder="Share your vision and any specific requirements..."
                   />
+                  {errors.message && (
+                    <p className="text-red-500 text-sm">
+                      {errors.message.message}
+                    </p>
+                  )}
                 </div>
 
                 <Button
                   type="submit"
-                  className="w-full py-6 text-lg font-medium rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white transition-all duration-300 relative overflow-hidden group"
                   disabled={isSubmitting}
+                  className="w-full py-6 text-lg font-medium rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white transition-all duration-300 relative overflow-hidden group"
                 >
                   {isSubmitting ? (
                     <motion.div
@@ -354,7 +402,6 @@ export function Contact() {
             </Card>
           </motion.div>
 
-          {/* Contact Information */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -372,7 +419,7 @@ export function Contact() {
 
                 <div className="space-y-6">
                   <motion.a
-                    href="tel:9293938520"
+                    href="tel:+19293938520"
                     className="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300 group"
                     whileHover={{ x: 8 }}
                   >
@@ -386,7 +433,7 @@ export function Contact() {
                   </motion.a>
 
                   <motion.a
-                    href="mailto:contact@ascentevents.com"
+                    href="mailto:contact@ascenteventsny.org"
                     className="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 transition-all duration-300 group"
                     whileHover={{ x: 8 }}
                   >
