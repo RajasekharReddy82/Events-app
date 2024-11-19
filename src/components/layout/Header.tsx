@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -21,19 +22,48 @@ import {
 } from "lucide-react";
 
 export function Header() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const scrollToContact = () => {
-    const contactSection = document.getElementById("contact-section");
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: "smooth" });
+  const scrollToSection = (id: string) => {
+    setTimeout(() => {
+      const section = document.getElementById(id);
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 100); // Small delay to ensure DOM is fully updated
+  };
+
+  const handleNavigation = (scrollTarget: string) => {
+    if (location.pathname === "/") {
+      // If already on the homepage, scroll directly
+      scrollToSection(scrollTarget);
+    } else {
+      // Navigate to home and scroll after navigation
+      navigate("/", { state: { scrollTo: scrollTarget } });
     }
   };
+
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      scrollToSection(location.state.scrollTo);
+
+      // Clear the state after scrolling to prevent it from scrolling on refresh
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location, navigate]);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div
+          className="flex items-center justify-between h-16 cursor-pointer"
+          onClick={() => {
+            navigate("/");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        >
           <div className="flex items-center space-x-2">
             <Calendar className="h-6 w-6 text-primary" />
             <span className="text-xl font-semibold">Ascent Events</span>
@@ -116,10 +146,15 @@ export function Header() {
           </div>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" onClick={scrollToContact}>
+            <Button
+              variant="ghost"
+              onClick={() => handleNavigation("contact-section")}
+            >
               Contact
             </Button>
-            <Button onClick={scrollToContact}>Book Now</Button>
+            <Button onClick={() => handleNavigation("contact-section")}>
+              Book Now
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -140,16 +175,23 @@ export function Header() {
       {isMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <Button variant="ghost" className="w-full justify-start">
+            {/* <Button variant="ghost" className="w-full justify-start">
               Events
             </Button>
             <Button variant="ghost" className="w-full justify-start">
               Services
-            </Button>
-            <Button variant="ghost" className="w-full justify-start">
+            </Button> */}
+            <Button
+              variant="ghost"
+              className="w-full justify-start"
+              onClick={() => handleNavigation("contact-section")}
+            >
               Contact
             </Button>
-            <Button className="w-full" onClick={scrollToContact}>
+            <Button
+              className="w-full"
+              onClick={() => handleNavigation("contact-section")}
+            >
               Book Now
             </Button>
           </div>
