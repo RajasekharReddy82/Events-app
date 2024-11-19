@@ -30,7 +30,7 @@ export function Header() {
     setTimeout(() => {
       const section = document.getElementById(id);
       if (section) {
-        section.scrollIntoView({ behavior: "smooth", block: "start" });
+        section.scrollIntoView({ behavior: "auto", block: "start" });
       }
     }, 100); // Small delay to ensure DOM is fully updated
   };
