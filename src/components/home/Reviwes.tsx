@@ -101,7 +101,7 @@ export function Reviews() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4  bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-primary-900 font-display md:leading-tight">
-            Love from Our Couples
+            Love from Our clients
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Let's Create Something Read what our wonderful clients have to say
