@@ -4,6 +4,11 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react()],
+  build:{
+    rollupOptions:{
+      external: ['module-name-to-externalize']
+    }
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
