@@ -59,6 +59,7 @@ export default {
         display: ['Playfair Display', 'serif'],
         serif: ['Cormorant Garamond', 'serif'],
         sans: ['Inter', 'sans-serif'],
+        playfair: ['Playfair Display', 'Georgia', 'serif']
       },
       borderRadius: {
         lg: 'var(--radius)',

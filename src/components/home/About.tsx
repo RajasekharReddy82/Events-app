@@ -33,7 +33,7 @@ export function About() {
           <span className="text-primary-600 font-semibold tracking-wider uppercase mb-4 block">
             Our Story
           </span>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-primary-900">
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent font-display bg-gradient-to-r from-primary-600 to-primary-900">
             About Ascent Events
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-primary-600 to-primary-400 mx-auto rounded-full mb-8" />
