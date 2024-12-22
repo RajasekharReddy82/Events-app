@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import HeaderLogo from "../../Assets/headerLogo.png";
+import HeaderLogo from "../../Assets/header.svg";
 
 export function Logo() {
   return (
