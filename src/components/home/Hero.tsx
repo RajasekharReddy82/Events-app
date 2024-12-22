@@ -53,7 +53,7 @@ export function Hero() {
             transition={{ delay: 0.3, duration: 0.8 }}
             className="relative inline-block mb-6"
           >
-            <h1 className="text-7xl md:text-8xl lg:text-9xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-white/90 to-white/80 tracking-tight">
+            <h1 className="text-7xl font-playfair md:text-8xl lg:text-8xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-white/90 to-white/80 tracking-tight">
               Ascent Events
             </h1>
             <motion.div
@@ -75,19 +75,9 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
-            className="text-2xl md:text-3xl text-white/90 max-w-3xl mx-auto mb-6 leading-relaxed font-light"
+            className="text-2md md:text-xl text-white/90 max-w-3xl mx-auto mb-6 leading-relaxed font-light"
           >
             New York & New Jersey's Premier Event Decor Company
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.8 }}
-            className="text-xl text-white/80 max-w-2xl mx-auto mb-12"
-          >
-            Specializing in American, Desi, Nigerian, and Spanish celebrations
-            nationwide
           </motion.p>
 
           {/* CTA Buttons */}
@@ -120,7 +110,7 @@ export function Hero() {
               className="group bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 text-lg px-10 py-7 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-white/20 border-2 border-white/50"
               onClick={scrollToServices}
             >
-              View Our Work
+              View Services
               <motion.span
                 className="absolute inset-0 rounded-full bg-white/10"
                 animate={{
