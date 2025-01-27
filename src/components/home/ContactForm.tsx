@@ -75,7 +75,8 @@ export function ContactForm() {
     formatPhoneNumber(e.target.value);
   };
 
-  const sanitizeData = (data: string) => data.replace(/\r(?!\n)/g, "\r\n");
+  const sanitizeData = (data: string) =>
+    data.replace(/\r(?!\n)/g, "\r\n").trim();
 
   const sanitizeForm = (form: HTMLFormElement) => {
     Array.from(form.elements).forEach((el: any) => {
