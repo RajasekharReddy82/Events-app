@@ -75,12 +75,23 @@ export function ContactForm() {
     formatPhoneNumber(e.target.value);
   };
 
+  const sanitizeData = (data: string) => data.replace(/\r(?!\n)/g, "\r\n");
+
+  const sanitizeForm = (form: HTMLFormElement) => {
+    Array.from(form.elements).forEach((el: any) => {
+      if (el.value) {
+        el.value = sanitizeData(el.value);
+      }
+    });
+  };
+
   const onSubmit = async (data: ContactFormData) => {
     if (!formRef.current) return;
 
     setIsSubmitting(true);
 
     try {
+      sanitizeForm(formRef.current);
       await emailjs.sendForm(
         "service_zjw0t9t",
         "template_w994oud",
