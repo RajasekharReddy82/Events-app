@@ -18,7 +18,7 @@ const transformApiData = (apiItem: IGalleryTypes): MediaItem => ({
   videoUrl: apiItem.resource_type === "video" ? apiItem.secure_url : undefined,
 });
 
-export function CategoryPage() {
+export default function CategoryPage() {
   const navigate = useNavigate();
   const { images, isLoading, error, retry } = useGalleryImages();
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);

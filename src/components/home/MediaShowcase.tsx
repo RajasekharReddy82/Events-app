@@ -85,7 +85,7 @@ const GalleryFallback = memo(
 
 GalleryFallback.displayName = "GalleryFallback";
 
-export function MediaShowcase() {
+export default function MediaShowcase() {
   const navigate = useNavigate();
   const location = useLocation();
   const { images, isLoading, error, retry } = useGalleryImages();

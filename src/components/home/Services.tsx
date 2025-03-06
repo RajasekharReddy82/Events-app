@@ -162,7 +162,7 @@ const item = {
   show: { opacity: 1, y: 0 },
 };
 
-export function Services() {
+export default function Services() {
   const [selectedService, setSelectedService] = useState<
     (typeof services)[0] | null
   >(null);

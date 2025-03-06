@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Award, Users, Sparkles, Shield } from "lucide-react";
 
-export function WhyChooseUs() {
+export default function WhyChooseUs() {
   const imgSource = `https://res.cloudinary.com/dmxc84rqd/image/upload/v1731825550/photo-1478146059778-26028b07395a_bs0zyw.jpg`;
   return (
     <section className="py-24 bg-gradient-to-b from-white to-gray-50 overflow-hidden">

@@ -74,7 +74,7 @@ const reviews: Review[] = [
   },
 ];
 
-export function Reviews() {
+export default function Reviews() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
     align: "start",

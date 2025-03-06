@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 
-export function Hero() {
+export default function Hero() {
   const scrollToContact = () => {
     const contactSection = document.getElementById("contact-section");
     if (contactSection) {

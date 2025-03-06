@@ -10,7 +10,7 @@ import {
   Trophy,
 } from "lucide-react";
 
-export function About() {
+export default function About() {
   return (
     <section className="relative py-32 overflow-hidden">
       {/* Gradient Background */}

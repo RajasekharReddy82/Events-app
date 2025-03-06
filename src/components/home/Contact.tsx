@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { ContactForm } from "./ContactForm";
 import { ContactInfo } from "./ContactInfo";
 
-export function Contact() {
+export default function Contact() {
   return (
     <section
       id="contact-section"

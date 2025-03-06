@@ -1,22 +1,25 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState, Suspense, lazy } from "react";
+import { ScrollToTop } from "./components/ScrollToTop";
 import { Header } from "@/components/layout/Header";
-import { Hero } from "@/components/home/Hero";
-import { Services } from "@/components/home/Services";
-import { About } from "@/components/home/About";
-import { WhyChooseUs } from "@/components/home/WhyChooseUs";
-import { MediaShowcase } from "@/components/home/MediaShowcase";
-import { Contact } from "@/components/home/Contact";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppDialog } from "@/components/WhatsAppDialog";
-import { CategoryPage } from "@/components/gallery/CategoryPage";
 import whatsApp from "./Assets/whatsappIcon.svg";
-import { useState } from "react";
-import { ScrollToTop } from "./components/ScrollToTop";
-import { Reviews } from "./components/home/Reviwes";
 
+// Lazy load components
+const Hero = lazy(() => import("@/components/home/Hero"));
+const About = lazy(() => import("@/components/home/About"));
+const Services = lazy(() => import("@/components/home/Services"));
+const WhyChooseUs = lazy(() => import("@/components/home/WhyChooseUs"));
+const MediaShowcase = lazy(() => import("@/components/home/MediaShowcase"));
+const Reviews = lazy(() => import("./components/home/Reviwes"));
+const Contact = lazy(() => import("@/components/home/Contact"));
+const CategoryPage = lazy(() => import("@/components/gallery/CategoryPage"));
+
+// HomePage component with lazy-loaded sections
 function HomePage() {
   return (
-    <>
+    <Suspense fallback={<div className="text-center p-10">Loading...</div>}>
       <Hero />
       <About />
       <Services />
@@ -24,7 +27,7 @@ function HomePage() {
       <MediaShowcase />
       <Reviews />
       <Contact />
-    </>
+    </Suspense>
   );
 }
 
@@ -52,11 +55,16 @@ function App() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header />
         <main>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/gallery" element={<CategoryPage />} />
-          </Routes>
+          <Suspense
+            fallback={<div className="text-center p-10">Loading...</div>}
+          >
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/gallery" element={<CategoryPage />} />
+            </Routes>
+          </Suspense>
         </main>
+
         <button
           onClick={handleWhatsAppClick}
           className="fixed bottom-6 right-6 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl z-50 group"
