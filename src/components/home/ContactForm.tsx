@@ -76,7 +76,10 @@ export function ContactForm() {
   };
 
   const sanitizeData = (data: string) =>
-    data.replace(/\r(?!\n)/g, "\r\n").trim();
+    data
+      .replace(/\r(?!\n)/g, "\r\n")
+      .replace(/\n(?!\r)/g, "\r\n")
+      .trim();
 
   const sanitizeForm = (form: HTMLFormElement) => {
     Array.from(form.elements).forEach((el: any) => {
