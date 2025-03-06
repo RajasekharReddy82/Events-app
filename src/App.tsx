@@ -16,10 +16,16 @@ const Reviews = lazy(() => import("./components/home/Reviwes"));
 const Contact = lazy(() => import("@/components/home/Contact"));
 const CategoryPage = lazy(() => import("@/components/gallery/CategoryPage"));
 
+const Spinner = () => (
+  <div className="flex justify-center items-center h-[80vh]">
+    <div className="w-12 h-12 border-4 border-gray-300 border-t-primary-600 rounded-full animate-spin"></div>
+  </div>
+);
+
 // HomePage component with lazy-loaded sections
 function HomePage() {
   return (
-    <Suspense fallback={<div className="text-center p-10">Loading...</div>}>
+    <Suspense fallback={<Spinner />}>
       <Hero />
       <About />
       <Services />
@@ -52,9 +58,12 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Ensure full height layout */}
+      <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
         <Header />
-        <main>
+
+        {/* Ensures main expands to push the footer down */}
+        <main className="flex-grow">
           <Suspense
             fallback={<div className="text-center p-10">Loading...</div>}
           >
@@ -65,6 +74,7 @@ function App() {
           </Suspense>
         </main>
 
+        {/* WhatsApp Button */}
         <button
           onClick={handleWhatsAppClick}
           className="fixed bottom-6 right-6 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl z-50 group"
