@@ -84,10 +84,7 @@ export function ContactForm() {
         const value = data[key as keyof ContactFormData];
         sanitizedData[key] =
           typeof value === "string"
-            ? value
-                .replace(/\r(?!\n)/g, "\r\n")
-                .replace(/\n(?!\r)/g, "\r\n")
-                .trim()
+            ? value.replace(/\r\n|\r|\n/g, "\r\n").trim()
             : String(value ?? "");
       }
 
